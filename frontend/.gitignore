@@ -30,12 +30,17 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Environment files (for security)
 .env*
+!.env.example  # If you want to keep a template file for others
 
-# vercel
+# Ignore Firebase credentials in Next.js
+.env.local
+
+# Vercel deployment
 .vercel
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
+

@@ -8,9 +8,16 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async () => {
+    if (!email || !password) {
+      setMessage("❌ Email and password are required.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      // Sign in user with Firebase Authentication
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -18,19 +25,20 @@ export default function Home() {
       );
       const token = await userCredential.user.getIdToken();
 
-      // Call backend API with Firebase token
       const response = await axios.get(
         "https://multi-cloud-ecommerce-backend-814232976544.us-central1.run.app/test",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setMessage(`✅ Success! Authenticated as ${response.data.user.email}`);
+      setMessage(`✅ Authenticated as ${response.data.user.email}`);
     } catch (error) {
       setMessage(`❌ Error: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
+
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
